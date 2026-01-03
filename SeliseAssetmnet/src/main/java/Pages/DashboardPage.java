@@ -61,8 +61,8 @@ public class DashboardPage
 
     public String userName()
     {
-        String profileNamw=userProfileName.getText();
-        return  profileNamw;
+
+        return  userProfileName.getText();
 
     }
 

@@ -84,7 +84,7 @@ public class TestCase
         String actulTitle = dpobj.employeeList();
         Assert.assertEquals(actulTitle,expectTitle);
     }
-    @Test(dependsOnMethods = "verifyLoginFunctionality")
+    @Test(dependsOnMethods = "verifyPmClick")
     public void verifyNamesNotEmpty() {
         Assert.assertTrue(dpobj.extractEmployee());
     }

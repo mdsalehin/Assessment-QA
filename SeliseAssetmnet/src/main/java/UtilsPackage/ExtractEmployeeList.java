@@ -33,13 +33,6 @@ public class ExtractEmployeeList
         int i=0;
         while(i<5) {
             storeNames.add(allNameElements.get(i).getText());
-
-            if(!((allEmployeeElements.get(i).getText())==null)) {
-                storeStatus.add(allEmployeeElements.get(i).getText());
-            }else {
-                storeStatus.add("");
-            }
-
             i++;
         }
 
