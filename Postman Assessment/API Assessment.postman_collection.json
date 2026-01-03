@@ -1,0 +1,370 @@
+{
+	"info": {
+		"_postman_id": "68096308-cc1b-4608-981e-311769e47ffe",
+		"name": "API Assessment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47470180",
+		"_collection_link": "https://salahin1999-7191570.postman.co/workspace/salahin~041009e8-1e4e-46f7-b860-2c95a6913e64/collection/47470180-68096308-cc1b-4608-981e-311769e47ffe?action=share&source=collection_link&creator=47470180"
+	},
+	"item": [
+		{
+			"name": "URl",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "postmanrulz",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/books",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const lodash = require('lodash');\r",
+							"\r",
+							"\r",
+							"\r",
+							"// Random Title\r",
+							"const title = \"Book \" + lodash.random(1000, 9999);\r",
+							"pm.collectionVariables.set(\"title\", title);\r",
+							"\r",
+							"// Random Author\r",
+							"const author = \"Author \" + lodash.random(1000, 9999);\r",
+							"pm.collectionVariables.set(\"author\", author);\r",
+							"\r",
+							"// Random Genre\r",
+							"const genres = [\"Fiction\", \"Tech\", \"Science\", \"History\", \"Biography\"];\r",
+							"const genre = genres[lodash.random(0, genres.length - 1)];\r",
+							"pm.collectionVariables.set(\"genre\", genre);\r",
+							"\r",
+							"// Random Year Published\r",
+							"const yearPublished = lodash.random(1900, 2026);\r",
+							"pm.collectionVariables.set(\"yearPublished\", yearPublished);\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse response\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"// Save bookId for later use (update/delete)\r",
+							"pm.collectionVariables.set(\"bookId\", jsonData.id);\r",
+							"\r",
+							"\r",
+							"pm.test(\"If book created successfully\", () => {\r",
+							"    pm.expect(jsonData.id).to.exist;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 201\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"pm.test(\"Book data matches request\", () => {\r",
+							"    pm.expect(jsonData.title).to.equal(pm.collectionVariables.get(\"title\"));\r",
+							"    pm.expect(jsonData.author).to.equal(pm.collectionVariables.get(\"author\"));\r",
+							"    pm.expect(jsonData.genre).to.equal(pm.collectionVariables.get(\"genre\"));\r",
+							"    pm.expect(jsonData.yearPublished).to.equal(\r",
+							"        Number(pm.collectionVariables.get(\"yearPublished\"))\r",
+							"    );\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "postmanrulz",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"{{title}}\",\r\n  \"author\": \"{{author}}\",\r\n  \"genre\": \"{{genre}}\",\r\n  \"yearPublished\": {{yearPublished}}\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/books",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const lodash = require('lodash');\r",
+							"\r",
+							"// Updated Title\r",
+							"const updatedTitle = \"Updated Book \" + lodash.random(1000, 9999);\r",
+							"pm.collectionVariables.set(\"updatedTitle\", updatedTitle);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse response\r",
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Book title updated successfully\", () => {\r",
+							"    pm.expect(jsonData.title).to.equal(pm.collectionVariables.get(\"updatedTitle\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response has title field\", () => {\r",
+							"    pm.expect(jsonData).to.have.property(\"title\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "postmanrulz",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"{{updatedTitle}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/books/{{bookId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books",
+						"{{bookId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", () => {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "postmanrulz",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/books/{{bookId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books",
+						"{{bookId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": ""
+		},
+		{
+			"key": "bookId",
+			"value": ""
+		},
+		{
+			"key": "title",
+			"value": ""
+		},
+		{
+			"key": "author",
+			"value": ""
+		},
+		{
+			"key": "genre",
+			"value": ""
+		},
+		{
+			"key": "yearPublished",
+			"value": ""
+		},
+		{
+			"key": "checkedOut",
+			"value": ""
+		},
+		{
+			"key": "isPermanentCollection",
+			"value": ""
+		},
+		{
+			"key": "createdAt",
+			"value": ""
+		},
+		{
+			"key": "lastTitle",
+			"value": ""
+		},
+		{
+			"key": "lastAuthor",
+			"value": ""
+		},
+		{
+			"key": "updateTitle",
+			"value": ""
+		},
+		{
+			"key": "updateAuthor",
+			"value": ""
+		},
+		{
+			"key": "updateYearPublished",
+			"value": ""
+		},
+		{
+			"key": "updateCheckedOut",
+			"value": ""
+		},
+		{
+			"key": "updatePermanent",
+			"value": ""
+		},
+		{
+			"key": "lastUpdatedTitle",
+			"value": ""
+		},
+		{
+			"key": "lastUpdatedAuthor",
+			"value": ""
+		},
+		{
+			"key": "lastUpdatedGenre",
+			"value": ""
+		},
+		{
+			"key": "updatedTitle",
+			"value": ""
+		}
+	]
+}
