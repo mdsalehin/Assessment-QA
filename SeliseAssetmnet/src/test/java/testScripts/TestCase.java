@@ -88,10 +88,10 @@ public class TestCase
     public void verifyNamesNotEmpty() {
         Assert.assertTrue(dpobj.extractEmployee());
     }
-   /* @AfterClass
+   @AfterClass
     public void quitDriver()
     {
         driverobj.quit();
-    }*/
+    }
 
 }
